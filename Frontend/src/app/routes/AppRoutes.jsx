@@ -9,6 +9,7 @@ import Dashboard from "../../features/dashboard/ui/pages/Dashboard";
 import { getUser } from "../../features/auth/states/authAction";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
+import Chat from "../../features/chat/ui/pages/Chat";
 function AppRoutes() {
     const dispatch = useDispatch()
 
@@ -42,13 +43,17 @@ function AppRoutes() {
             element: <ProtectedRoute />,
             children: [
                 {
-                    path: "",
                     element: <DashboardLayout />,
                     children: [
-                        {
-                            path: "",
+                         {
+                            index : true,
                             element: <Dashboard />
-                        }
+                        },
+                        {
+                            path: "chat",
+                            element: <Chat />
+                        },
+                        
                     ]
                 }
             ]

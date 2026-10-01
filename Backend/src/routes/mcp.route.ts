@@ -5,6 +5,6 @@ import {McpController} from "../controller/mcp.controller.ts";
 const mcpRoutes = express.Router();
 
 
-mcpRoutes.get("/mcp-controller" , McpController)
+mcpRoutes.post("/mcp-controller" , McpController)
 
 export default mcpRoutes;

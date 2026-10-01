@@ -61,11 +61,10 @@ server.registerTool(
                 content: [
                     {
                         type: "text",
-                        text: `Error: ${
-                            err instanceof Error
+                        text: `Error: ${err instanceof Error
                                 ? err.message
                                 : String(err)
-                        }`,
+                            }`,
                     },
                 ],
 
@@ -115,11 +114,10 @@ server.registerTool(
                 content: [
                     {
                         type: "text",
-                        text: `Error: ${
-                            err instanceof Error
+                        text: `Error: ${err instanceof Error
                                 ? err.message
                                 : String(err)
-                        }`,
+                            }`,
                     },
                 ],
 
@@ -129,20 +127,17 @@ server.registerTool(
     }
 );
 
-server.registerTool("addTransaction" , {
-    title : "addTransaction",
-    description : "Add a new transaction",
-    inputSchema : {
-        type : z.object({
-            type : z.string().describe("Transaction type, e.g. 'income' or 'expense'"),
-            amount : z.number().describe("Transaction amount"),
-            category : z.string().describe("Transaction category"),
-            date : z.string().describe("Transaction date in YYYY-MM-DD format"),
-            description : z.string().describe("Transaction description"),
-        })
-    },
-},async function addTransactionTool({type , amount , category , date , description})
-{
+server.registerTool("addTransaction", {
+    title: "addTransaction",
+    description: "Add a new transaction",
+    inputSchema: {
+        type: z.string().describe("Transaction type, e.g. 'income' or 'expense'"),
+        amount: z.number().describe("Transaction amount"),
+        category: z.string().describe("Transaction category"),
+        date: z.string().describe("Transaction date in YYYY-MM-DD format"),
+        description: z.string().describe("Transaction description"),
+    }
+}, async function addTransactionTool({ type, amount, category, date, description }) {
     try {
         const response = await addTransaction(
             type,
@@ -168,11 +163,10 @@ server.registerTool("addTransaction" , {
             content: [
                 {
                     type: "text",
-                    text: `Error: ${
-                        err instanceof Error
+                    text: `Error: ${err instanceof Error
                             ? err.message
                             : String(err)
-                    }`,
+                        }`,
                 },
             ],
 

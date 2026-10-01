@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { chatAction } from "../../state/chatActions";
 import { addMessage } from "../../state/chatSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 function Chat() {
     const dispatch = useDispatch();
@@ -20,8 +21,6 @@ function Chat() {
         }
 
         const prompt = input.trim();
-
-        // Add user message immediately
         dispatch(
             addMessage({
                 id: Date.now(),
@@ -29,15 +28,7 @@ function Chat() {
                 text: prompt
             })
         );
-
-        // Send message to backend
-        dispatch(
-            chatAction({
-                prompt
-            })
-        );
-
-        // Clear input
+        dispatch(chatAction({prompt}));
         setInput("");
     };
 
@@ -74,12 +65,55 @@ function Chat() {
 
                     </div>
 
+                    {/* Dashboard Button */}
+                    <Link
+                        to="/dashboard"
+                        className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-medium text-[#9CA3AF] hover:text-white bg-[#171b26]/80 hover:bg-[#1f2433] border border-white/[0.08] hover:border-[#10B981]/40 transition-all duration-200 shadow-sm group"
+                    >
+                        <svg
+                            className="w-4 h-4 text-[#9CA3AF] group-hover:text-[#10B981] transition-colors"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z"
+                            />
+                        </svg>
+                        <span>Dashboard</span>
+                    </Link>
+
                 </div>
 
             </header>
 
+            {/* Custom Minimal Scrollbar */}
+            <style>{`
+                .chat-scrollbar::-webkit-scrollbar {
+                    width: 5px;
+                }
+                .chat-scrollbar::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .chat-scrollbar::-webkit-scrollbar-thumb {
+                    background: rgba(255, 255, 255, 0.12);
+                    border-radius: 9999px;
+                }
+                .chat-scrollbar::-webkit-scrollbar-thumb:hover {
+                    background: rgba(16, 185, 129, 0.4);
+                }
+                .chat-scrollbar {
+                    scrollbar-width: thin;
+                    scrollbar-color: rgba(255, 255, 255, 0.12) transparent;
+                    scroll-behavior: smooth;
+                }
+            `}</style>
+
             {/* Chat Messages Area */}
-            <main className="relative z-10 flex-1 overflow-y-auto px-4 py-6 sm:px-6">
+            <main className="relative z-10 flex-1 overflow-y-auto chat-scrollbar px-4 py-6 sm:px-6">
 
                 <div className="max-w-[900px] mx-auto w-full space-y-5 flex flex-col">
 

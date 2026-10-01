@@ -8,9 +8,8 @@ export const chatAction = createAsyncThunk(
 
         try {
             const response = await axiosInstance.post("/mcp/mcp-controller",{ prompt });
-            console.log(response)
-
-            return response.data.toolResult.content[0].text;
+            console.log(response.data.reply)
+            return response.data.reply
         } catch (error) {
             return thunkApi.rejectWithValue(
                 error.response?.data?.message || error.message

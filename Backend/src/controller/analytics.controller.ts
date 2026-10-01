@@ -61,8 +61,7 @@ export async function getTotalExpenseController(req: Request , res: Response) {
       
       return res.status(200).json({
         success : true,
-        message : "Total Expense Fetched Successfully",
-        data : data
+        message : `Total Expense Fetched Successfully. ${JSON.stringify(data)}`,
       })
     } catch (error) {
         console.log(error.message)
@@ -82,8 +81,7 @@ export async function getTotalBalanceController(req: Request , res: Response) {
       
       return res.status(200).json({
         success : true,
-        message : "Total Balance Fetched Successfully",
-        data : data
+        message : `Total Balance Fetched Successfully. ${JSON.stringify(data)}`,
       })
     } catch (error) {
         console.log(error.message)
@@ -103,8 +101,7 @@ export async function getExpenseByCategoryController(req: Request , res: Respons
       
       return res.status(200).json({
         success : true,
-        message : "Expense By Category Fetched Successfully",
-        data : data
+        message : `Expense By Category Fetched Successfully. ${JSON.stringify(data)}`,
       })
     } catch (error) {
         console.log(error.message)
@@ -126,8 +123,7 @@ export async function generateBudgetController(req:Request , res:Response)
         
         return res.status(200).json({
             success : true,
-            message : "Budget Generated Successfully",
-            data : aiResponse
+            message : `Budget Generated Successfully. ${JSON.stringify(aiResponse)}`,
         })
     }
     catch(error)

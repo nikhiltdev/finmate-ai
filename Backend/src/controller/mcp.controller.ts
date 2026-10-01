@@ -1,77 +1,76 @@
 import type { Request, Response } from "express";
 import { getMcpClientService } from "../services/mcp.service.js";
 import { convertMcpToolsToGeminiTools } from "../services/tool-converter.service.js";
-import { aiResponseService } from "../services/ai.service.js";
+import {
+    aiResponseService,
+    aiFinalReplyService,
+    extractText,
+} from "../services/ai.service.js";
 
-export async function McpController(
-    req: Request,
-    res: Response
-) {
+export async function McpController(req: Request, res: Response) {
+    let client: Awaited<ReturnType<typeof getMcpClientService>> | undefined;
+
     try {
-        console.log("========== MCP CONTROLLER ==========");
-        console.log("REQ BODY:", req.body);
-        console.log("PROMPT:", req.body?.prompt);
-        const {prompt , tool} = req.body
-        
-        // Get access token from logged-in user's cookie
-        const accessToken = req.cookies.accessToken;
-
-        if (!accessToken) {
-            return res.status(401).json({
-                success: false,
-                message: "User is not authenticated"
-            });
+        const prompt = req.body?.prompt;
+        if (typeof prompt !== "string" || !prompt.trim()) {
+            return res.status(400).json({ success: false, message: "Prompt is required" });
         }
 
-        // Start MCP server with user's token internally
-        const client = await getMcpClientService(accessToken);
+        const accessToken = req.cookies?.accessToken;
+        if (!accessToken) {
+            return res.status(401).json({ success: false, message: "User is not authenticated" });
+        }
 
-        // Get MCP tools
+        client = await getMcpClientService(accessToken);
+
         const toolList = await client.listTools();
-
-        // Convert MCP tools → Gemini tools
         const tools = convertMcpToolsToGeminiTools(toolList);
 
-        // Ask Gemini
-        const geminiResponse = await aiResponseService({
-            tools,
-            prompt
-        });
-        
-        // Find function call
-        const toolCall = geminiResponse.steps?.find(
+        // Call 1: Gemini picks a tool
+        const geminiResponse = await aiResponseService({ tools, prompt });
+
+        const toolCall: any = geminiResponse.steps?.find(
             (step: any) => step.type === "function_call"
         );
 
-        if (toolCall) {
-
-            const toolResult = await client.callTool({
-                name: toolCall.name,
-                arguments: toolCall.arguments,
-            });
-
-            console.log("MCP TOOL RESULT:");
-            console.dir(toolResult, { depth: null });
-
+        // No tool needed: return plain text
+        if (!toolCall) {
             return res.json({
                 success: true,
-                toolCall,
-                toolResult,
+                reply:
+                    extractText(geminiResponse) ||
+                    "Sorry, I didn't understand that. Please rephrase.",
             });
         }
 
+        // Run the tool
+        const toolResult: any = await client.callTool({
+            name: toolCall.name,
+            arguments: toolCall.arguments,
+        });
+
+        const toolResultText = toolResult.content?.[0]?.text ?? "";
+
+        // Call 2: Gemini writes the final reply
+        const reply = await aiFinalReplyService({
+            prompt,
+            toolName: toolCall.name,
+            toolResultText: toolResult.isError
+                ? `Error: ${toolResultText}`
+                : toolResultText,
+        });
+
         return res.json({
             success: true,
-            response: geminiResponse,
+            reply: reply || "Done! Your request was processed.",
         });
-
-    } catch (error: any) {
-
-        console.log(error);
-
+    } catch (error) {
+        console.error("MCP controller error:", error);
         return res.status(500).json({
             success: false,
-            message: error.message,
+            message: "Something went wrong. Please try again.",
         });
+    } finally {
+        await client?.close();
     }
 }

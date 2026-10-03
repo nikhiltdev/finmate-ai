@@ -16,12 +16,10 @@ function useAuth() {
   } = useForm({});
 
   const onLoginSubmit = (data) => {
-    console.log('Login Form Submitted:', data);
     dispatch(loginUser(data))
   };
 
   const onRegisterSubmit = (data) => {
-    console.log('Register Form Submitted:', data);
     dispatch(registerUser(data))
   };
 

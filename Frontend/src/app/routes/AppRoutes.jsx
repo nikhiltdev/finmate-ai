@@ -10,6 +10,8 @@ import { getUser } from "../../features/auth/states/authAction";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import Chat from "../../features/chat/ui/pages/Chat";
+import Profile from "../../features/profile/ui/Profile";
+
 function AppRoutes() {
     const dispatch = useDispatch()
 
@@ -53,6 +55,10 @@ function AppRoutes() {
                             path: "chat",
                             element: <Chat />
                         },
+                        {
+                            path : "profile",
+                            element :<Profile />
+                        }
                         
                     ]
                 }

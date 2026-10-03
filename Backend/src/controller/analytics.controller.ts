@@ -42,6 +42,7 @@ export async function getTotalIncomeController(req: Request , res: Response) {
       return res.status(200).json({
         success : true,
         message : `Total Income Fetched Successfully. ${JSON.stringify(data)}`,
+        data : data
       })
     } catch (error) {
         console.log(error.message)
@@ -62,6 +63,7 @@ export async function getTotalExpenseController(req: Request , res: Response) {
       return res.status(200).json({
         success : true,
         message : `Total Expense Fetched Successfully. ${JSON.stringify(data)}`,
+        data : data
       })
     } catch (error) {
         console.log(error.message)
@@ -82,6 +84,7 @@ export async function getTotalBalanceController(req: Request , res: Response) {
       return res.status(200).json({
         success : true,
         message : `Total Balance Fetched Successfully. ${JSON.stringify(data)}`,
+        data : data
       })
     } catch (error) {
         console.log(error.message)

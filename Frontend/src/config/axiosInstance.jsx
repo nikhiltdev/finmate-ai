@@ -9,7 +9,6 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.response.use(
     (response) => response,
     async(error) => {
-        console.log("interceptors" , error.config)
         let originalRequest = error.config;
         if(error.response.status === 401 && !originalRequest.retry){
             originalRequest.retry = true;

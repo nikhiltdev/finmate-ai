@@ -43,6 +43,31 @@ function AsideNav() {
           </svg>
           <span>Chat</span>
         </NavLink>
+
+        <NavLink
+          to="/dashboard/profile"
+          className={({ isActive }) =>
+            `flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all duration-150 ${
+              isActive
+                ? "bg-[#10B981]/15 text-[#10B981] border border-[#10B981]/30 shadow-[0_0_15px_rgba(16,185,129,0.1)]"
+                : "text-[#9CA3AF] hover:text-[#F9FAFB] hover:bg-white/[0.05] border border-transparent"
+            }`
+          }
+        >
+          <svg
+            className="w-4 h-4 shrink-0"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+          <span>Profile</span>
+        </NavLink>
       </nav>
     </aside>
   );
